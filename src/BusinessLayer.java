@@ -14,7 +14,6 @@ public class BusinessLayer
 	Statement st = null;
 	Connection cn = null;
 	
-	//yahooo !
 	
 	public void insert(String name, String mobile , String userID , String email ,String  password)
 	{
@@ -22,14 +21,16 @@ public class BusinessLayer
 		try
 		{
 			cn = DriverManager.getConnection(url, user, pass);
-			st = cn.createStatement();
-			query = "insert into loginForm values ('"+name+"',"+mobile+",'"+userID+"','"+email+"','"+password+"')";
+			PreparedStatement pst = cn.prepareStatement("insert into loginForm values(?,?,?,?,?)");		
 			
 			//insert into loginForm values('sarada',9778880385,'saradafuture','sarada12ru@gmail.com','sarada...');			
-			int rvalue = st.executeUpdate(query);
+			pst.setString(1,name);
+			pst.setString(2,mobile);
+			pst.setString(3,userID);
+			pst.setString(4,email);
+			pst.setString(5,password);
+			int rvalue = pst.executeUpdate();
 		
-			System.out.println(rvalue);
-			
 			if (rvalue > 0)
 			{
 				JOptionPane.showMessageDialog(null, "Insertion Successfully !");
@@ -68,27 +69,18 @@ public class BusinessLayer
 		try 
 		{
 			cn = DriverManager.getConnection(url, user, pass);
-			st = cn.createStatement();
-			query = "select * from loginForm where USERID = '"+userID+"'";
-			System.out.println(query);
-			ResultSet rs = st.executeQuery(query);
-			if (rs == null)
+			PreparedStatement pst = cn.prepareStatement("select * from loginForm where userID=?");
+			pst.setString(1, userID);
+			ResultSet rs = pst.executeQuery();
+			if(rs.next())
 			{
-				JOptionPane.showMessageDialog(null,"Input a valid UserID");
-			}
-			else
-			{
-				rs.next();
+				if(password.equals(rs.getString(5)))
 				{
-					String RePass = rs.getString(5);
-					if (password.equals(RePass))
-					{
-						JOptionPane.showMessageDialog(null, "Login Successful !");
-					}
-					else
-					{
-						JOptionPane.showMessageDialog(null,"Please use valid  user name & password for login! ");
-					}
+					JOptionPane.showMessageDialog(null," Login Successful");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null," Failed");
 				}
 			}
 		}

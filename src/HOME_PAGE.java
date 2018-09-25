@@ -70,7 +70,7 @@ public class HOME_PAGE extends JFrame {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.LIGHT_GRAY);
-		panel_1.setBounds(44, 147, 292, 164);
+		panel_1.setBounds(44, 147, 292, 235);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
